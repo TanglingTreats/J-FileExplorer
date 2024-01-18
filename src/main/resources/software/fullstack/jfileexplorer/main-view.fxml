@@ -18,7 +18,7 @@
     </padding>
     <top>
         <HBox>
-            <Button text="New"/>
+            <Button text="New" onAction="#createNewFile"/>
         </HBox>
     </top>
     <left>
