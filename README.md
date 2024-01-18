@@ -11,6 +11,9 @@ Java-based File Explorer
 ## Quality of Life
 - Preview highlighted files
 
+# Design
+![Application design](./resources/file-explorer-design.png)
+
 # Approach
 1. Project scaffolding
     - Renaming files from bootstrapped code
