@@ -10,6 +10,10 @@ Java-based File Explorer
 
 ## Quality of Life
 - Preview highlighted files
+- Folder breadcrumb trail
+
+# Design
+![Application design](./resources/file-explorer-design.png)
 
 # Approach
 1. Project scaffolding
