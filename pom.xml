@@ -86,7 +86,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                software.fullstack.jfileexplorer/software.fullstack.jfileexplorer.HelloApplication
+                                software.fullstack.jfileexplorer/software.fullstack.jfileexplorer.JFileExplorer
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
