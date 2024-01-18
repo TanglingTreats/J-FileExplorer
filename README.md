@@ -21,3 +21,7 @@ Java-based File Explorer
     - Setup key components including linkages: Main view. Stylesheet. Main controller. Application starting point.
 2. Develop core features
 3. Develop QoL features
+
+# Technology Stack
+- Java 17
+- Java FX
