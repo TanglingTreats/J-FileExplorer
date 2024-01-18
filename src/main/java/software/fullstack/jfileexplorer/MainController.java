@@ -1,12 +1,12 @@
 package software.fullstack.jfileexplorer;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
@@ -20,7 +20,7 @@ public class MainController {
      * Contains other columns
      */
     @FXML
-    private TableView directoryContentHolder;
+    private TreeView directoryOverview;
 
     @FXML
     private BorderPane root;
@@ -30,7 +30,7 @@ public class MainController {
      */
     private Node emptyContent;
 
-    private Node fileDirectoryView;
+    private TableView directoryView = new TableView();
 
     public MainController() {
         Label emptyLabel = new Label();
@@ -39,21 +39,30 @@ public class MainController {
         emptyHBox.setAlignment(Pos.CENTER);
         emptyHBox.setStyle("-fx-background-color: white");
 
-        emptyContent=emptyHBox;
+        emptyContent = emptyHBox;
 
         // Initialize table view
-        TableView directoryView = new TableView();
         TableColumn fileNameCol = new TableColumn("Name");
         TableColumn fileSizeCol = new TableColumn("Size");
 
+        fileNameCol.setCellValueFactory(new PropertyValueFactory<FileNode, String>("fileName"));
+        fileSizeCol.setCellValueFactory(new PropertyValueFactory<FileNode, Integer>("fileSize"));
+
         directoryView.getColumns().addAll(fileNameCol, fileSizeCol);
-        fileDirectoryView = directoryView;
     }
 
     @FXML
     public void initialize() {
+        ObservableList<FileNode> nodes = FXCollections.observableArrayList(
+                new FileNode("sample file 1", 5),
+                new FileNode("sample file 2", 10),
+                new FileNode("sample file 3", 8)
+        );
+
+        directoryView.setItems(nodes);
+
         // TODO: Set center content based on existence of content in folder
-        root.setCenter(emptyContent);
+        root.setCenter(directoryView);
     }
     @FXML
     protected void onHelloButtonClick() {
