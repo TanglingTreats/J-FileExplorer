@@ -37,9 +37,9 @@ public class FSTreeItem extends TreeItem<String> {
             String value=file.toString();
             int indexOf=value.lastIndexOf(File.separator);
             if(indexOf>0){
-                this.setValue(value.substring(indexOf+1));
+                this.setValue(value.substring(indexOf+1).replaceAll("[\\n\\r]", ""));
             }else{
-                this.setValue(value);
+                this.setValue(value.replaceAll("[\\n\\r]", ""));
             }
         }
 

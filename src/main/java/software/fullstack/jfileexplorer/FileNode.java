@@ -11,7 +11,7 @@ public class FileNode {
     private String absPath;
 
     public FileNode(String name, String ftype, Long size, String absPath) {
-        fileName = new SimpleStringProperty(name);
+        fileName = new SimpleStringProperty(name.replaceAll("[\\n\\r]", ""));
         type = new SimpleStringProperty(ftype);
         fileSize = new SimpleLongProperty(size);
         this.absPath = absPath;
