@@ -6,7 +6,7 @@ Java-based File Explorer
 - Navigate through the file directories
     - List files and folders
 - Have an overall view of the file directory
-    - Accordion dropdown for nests
+    - Accordion dropdown for nested items
 
 ## Quality of Life
 - Preview highlighted files
@@ -25,3 +25,6 @@ Java-based File Explorer
 # Technology Stack
 - Java 17
 - Java FX
+
+# Current Progress
+![Current progress](./resources/progress.png)
