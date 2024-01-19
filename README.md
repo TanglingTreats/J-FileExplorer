@@ -25,6 +25,7 @@ Java-based File Explorer for project 3 - Directory Browser
 # Technology Stack
 - Java 17
 - Java FX
+- Maven
 
 # Current Progress
 ![Current progress](./resources/progress.png)
