@@ -23,7 +23,7 @@
     </top>
     <left>
         <TreeView fx:id="directoryOverview">
-            <TreeItem value="Root Drive">
+            <TreeItem value="Home">
                 <children>
                     <TreeItem value="Sample File">
                     </TreeItem>

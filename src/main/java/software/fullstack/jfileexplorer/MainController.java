@@ -9,8 +9,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import software.fullstack.jfileexplorer.traversal.FSIndex;
+import software.fullstack.jfileexplorer.traversal.FSNode;
 
-import static software.fullstack.jfileexplorer.JFileExplorer.appWidth;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainController {
     @FXML
@@ -30,36 +33,46 @@ public class MainController {
      */
     private Node emptyContent;
 
-    private TableView directoryView = new TableView();
+    private TableView<FileNode> directoryView = new TableView<>();
+
+    private FSIndex dirIndex = new FSIndex();
+
+    private ObservableList<FileNode> observableFileNodes = FXCollections.observableArrayList();
 
     public MainController() {
         Label emptyLabel = new Label();
         emptyLabel.setText("Nothing to show here...");
+
         HBox emptyHBox = new HBox(emptyLabel);
         emptyHBox.setAlignment(Pos.CENTER);
         emptyHBox.setStyle("-fx-background-color: white");
 
         emptyContent = emptyHBox;
 
-        // Initialize table view
+        // Initialize table columns
         TableColumn fileNameCol = new TableColumn("Name");
         TableColumn fileSizeCol = new TableColumn("Size");
 
+        fileNameCol.setMinWidth(100);
         fileNameCol.setCellValueFactory(new PropertyValueFactory<FileNode, String>("fileName"));
-        fileSizeCol.setCellValueFactory(new PropertyValueFactory<FileNode, Integer>("fileSize"));
+
+        fileSizeCol.setMinWidth(100);
+        fileSizeCol.setCellValueFactory(new PropertyValueFactory<FileNode, Long>("fileSize"));
 
         directoryView.getColumns().addAll(fileNameCol, fileSizeCol);
     }
 
     @FXML
     public void initialize() {
-        ObservableList<FileNode> nodes = FXCollections.observableArrayList(
-                new FileNode("sample file 1", 5),
-                new FileNode("sample file 2", 10),
-                new FileNode("sample file 3", 8)
-        );
+        // Check index
+        FSNode home = dirIndex.home;
+        System.out.println(home.getFile().getFileName());
+        System.out.println(home.getChildren().size());
 
-        directoryView.setItems(nodes);
+        // Populate observable list
+        getFileNodesFromIndex(home);
+
+        directoryView.setItems(observableFileNodes);
 
         // TODO: Set center content based on existence of content in folder
         root.setCenter(directoryView);
@@ -80,5 +93,15 @@ public class MainController {
         Else,
             remove editable row from table view
          */
+    }
+
+    private void getFileNodesFromIndex(FSNode fsNode) {
+        // Clear current data if any
+        observableFileNodes.clear();
+
+        List<FSNode> children = fsNode.getChildren();
+        for (FSNode child: children) {
+            observableFileNodes.add(child.getFile());
+        }
     }
 }
