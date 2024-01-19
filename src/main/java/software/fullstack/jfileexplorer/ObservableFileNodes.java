@@ -2,18 +2,29 @@ package software.fullstack.jfileexplorer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.layout.BorderPane;
 import software.fullstack.jfileexplorer.traversal.FSNode;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
 public class ObservableFileNodes {
 
-    private boolean showHiddenFiles = false;
-    private ObservableList<FileNode> observableFileNodes = FXCollections.observableArrayList();
+    private final boolean showHiddenFiles = false;
+    private final ObservableList<FileNode> observableFileNodes = FXCollections.observableArrayList();
 
-    public ObservableFileNodes(FSNode fsNode) {
+    private final BorderPane root;
+
+    private final Node emptyContent;
+
+    private final Node directoryView;
+
+    public ObservableFileNodes(FSNode fsNode, BorderPane root, Node emptyContent, Node directoryView) {
+        this.root = root;
+        this.emptyContent = emptyContent;
+        this.directoryView = directoryView;
+
+        // Initialize observable file nodes
         getFileNodesFromIndex(fsNode);
     }
 
@@ -26,6 +37,7 @@ public class ObservableFileNodes {
     }
 
     private void getFileNodesFromIndex(FSNode fsNode) {
+        boolean wasEmpty = observableFileNodes.isEmpty();
         // Clear current data if any
         observableFileNodes.clear();
 
@@ -37,7 +49,16 @@ public class ObservableFileNodes {
                 observableFileNodes.add(child.getFile());
             }
         }
+
+        if(observableFileNodes.isEmpty()) {
+            root.setCenter(emptyContent);
+        } else {
+            if(wasEmpty) {
+                root.setCenter(directoryView);
+            }
+        }
     }
+
     private boolean toShowHiddenFiles(boolean startsWithDot) {
         return !(startsWithDot && !showHiddenFiles);
     }

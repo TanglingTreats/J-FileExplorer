@@ -72,16 +72,9 @@ public class MainController {
         FSNode home = dirIndex.home;
 
         // Populate observable list
-        observableFileNodes = new ObservableFileNodes(home);
+        observableFileNodes = new ObservableFileNodes(home, root, emptyContent, directoryView);
 
         directoryView.setItems(observableFileNodes.getFileNodes());
-
-        // Set empty content pane if home is empty
-        if(!home.getChildren().isEmpty()) {
-            root.setCenter(directoryView);
-        } else {
-            root.setCenter(emptyContent);
-        }
 
         // Initialize Directory overview
         directoryOverview.setRoot(getFSTreeItemsFromIndex(home));
