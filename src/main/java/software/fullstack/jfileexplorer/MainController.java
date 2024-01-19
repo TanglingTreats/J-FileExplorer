@@ -23,7 +23,7 @@ public class MainController {
      * Contains other columns
      */
     @FXML
-    private TreeView directoryOverview;
+    private TreeView<String> directoryOverview;
 
     @FXML
     private BorderPane root;
@@ -37,7 +37,8 @@ public class MainController {
 
     private FSIndex dirIndex = new FSIndex();
 
-    private ObservableList<FileNode> observableFileNodes = FXCollections.observableArrayList();
+    private ObservableFileNodes observableFileNodes;
+//    private ObservableList<FileNode> observableFileNodes = FXCollections.observableArrayList();
 
     // Toggle to show or hide hidden files
     private boolean showHiddenFiles = false;
@@ -54,7 +55,7 @@ public class MainController {
 
         // Initialize table columns
         TableColumn fileNameCol = new TableColumn("Name");
-        TableColumn fileSizeCol = new TableColumn("Size");
+        TableColumn fileSizeCol = new TableColumn("Size (KB)");
 
         fileNameCol.setMinWidth(100);
         fileNameCol.setCellValueFactory(new PropertyValueFactory<FileNode, String>("fileName"));
@@ -70,9 +71,10 @@ public class MainController {
         // Check index
         FSNode home = dirIndex.home;
 
-        directoryView.setItems(observableFileNodes);
         // Populate observable list
-        getFileNodesFromIndex(home);
+        observableFileNodes = new ObservableFileNodes(home);
+
+        directoryView.setItems(observableFileNodes.getFileNodes());
 
         // Set empty content pane if home is empty
         if(!home.getChildren().isEmpty()) {
@@ -83,6 +85,7 @@ public class MainController {
 
         // Initialize Directory overview
         directoryOverview.setRoot(getFSTreeItemsFromIndex(home));
+        directoryOverview.setCellFactory(p -> new InteractiveTreeCellImpl(observableFileNodes));
 
     }
     @FXML
@@ -103,28 +106,15 @@ public class MainController {
          */
     }
 
-    private void getFileNodesFromIndex(FSNode fsNode) {
-        // Clear current data if any
-        observableFileNodes.clear();
-
-        List<FSNode> children = fsNode.getChildren();
-        for (FSNode child: children) {
-            // If file does not start with '.' and is not showing hidden files
-            // Prioritise non-hidden files
-            if(toShowHiddenFiles(child.getFile().getFileName().startsWith("."))) {
-                observableFileNodes.add(child.getFile());
-            }
-        }
-    }
-
     private FSTreeItem getFSTreeItemsFromIndex(FSNode fsNode) {
         List<FSNode> children = fsNode.getChildren();
-        FSTreeItem rootTreeItem = new FSTreeItem(fsNode.getPath().toFile());
+
+        FSTreeItem rootTreeItem = new FSTreeItem(fsNode.getPath().toFile(), fsNode);
         for (FSNode child: children) {
             if(toShowHiddenFiles(child.getFile().getFileName().startsWith("."))) {
                 FSTreeItem treeItem;
                 if(child.isLeaf()) {
-                    treeItem = new FSTreeItem(child.getPath().toFile());
+                    treeItem = new FSTreeItem(child.getPath().toFile(), child);
                 } else {
                     treeItem = getFSTreeItemsFromIndex(child);
                 }

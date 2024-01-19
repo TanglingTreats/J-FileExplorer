@@ -41,11 +41,20 @@ public class FSIndex {
                 // Is file directory?
                 // If yes,
                 //      Create new FSNode and push to stack
+                //      Is current depth the same?
+                //          Add current node to parent
                 //      Is current depth lower?
-                //          Push to stack, update depth
+                //          Push current node to stack, update depth
                 //      Else
                 //          Pop stack
-                // If no, isLastFileDir = true, peek and add to FSNode children
+                //          Add current node to parent
+                //      Set last node <- current node
+                // Else,
+                //      Is current depth the same?
+                //          Pop stack
+                //      Is current depth lower?
+                //          Push current node into stack
+                //      Peek stack and add to FSNode children
                 if(file.isDirectory()) {
                     // Create directory file node
                     FileNode fileNode = new FileNode(file.getName(), "dir", 0L, file.getAbsolutePath());
