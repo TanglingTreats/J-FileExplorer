@@ -1,16 +1,19 @@
 package software.fullstack.jfileexplorer;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import software.fullstack.jfileexplorer.traversal.FSIndex;
+import software.fullstack.jfileexplorer.traversal.FSNode;
 
-import static software.fullstack.jfileexplorer.JFileExplorer.appWidth;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainController {
     @FXML
@@ -20,7 +23,7 @@ public class MainController {
      * Contains other columns
      */
     @FXML
-    private TableView directoryContentHolder;
+    private TreeView<String> directoryOverview;
 
     @FXML
     private BorderPane root;
@@ -30,30 +33,53 @@ public class MainController {
      */
     private Node emptyContent;
 
-    private Node fileDirectoryView;
+    private TableView<FileNode> directoryView = new TableView<>();
+
+    private FSIndex dirIndex = new FSIndex();
+
+    private ObservableFileNodes observableFileNodes;
+//    private ObservableList<FileNode> observableFileNodes = FXCollections.observableArrayList();
+
+    // Toggle to show or hide hidden files
+    private boolean showHiddenFiles = false;
 
     public MainController() {
         Label emptyLabel = new Label();
         emptyLabel.setText("Nothing to show here...");
+
         HBox emptyHBox = new HBox(emptyLabel);
         emptyHBox.setAlignment(Pos.CENTER);
         emptyHBox.setStyle("-fx-background-color: white");
 
-        emptyContent=emptyHBox;
+        emptyContent = emptyHBox;
 
-        // Initialize table view
-        TableView directoryView = new TableView();
+        // Initialize table columns
         TableColumn fileNameCol = new TableColumn("Name");
-        TableColumn fileSizeCol = new TableColumn("Size");
+        TableColumn fileSizeCol = new TableColumn("Size (KB)");
+
+        fileNameCol.setMinWidth(100);
+        fileNameCol.setCellValueFactory(new PropertyValueFactory<FileNode, String>("fileName"));
+
+        fileSizeCol.setMinWidth(100);
+        fileSizeCol.setCellValueFactory(new PropertyValueFactory<FileNode, Long>("fileSize"));
 
         directoryView.getColumns().addAll(fileNameCol, fileSizeCol);
-        fileDirectoryView = directoryView;
     }
 
     @FXML
     public void initialize() {
-        // TODO: Set center content based on existence of content in folder
-        root.setCenter(emptyContent);
+        // Check index
+        FSNode home = dirIndex.home;
+
+        // Populate observable list
+        observableFileNodes = new ObservableFileNodes(home, root, emptyContent, directoryView);
+
+        directoryView.setItems(observableFileNodes.getFileNodes());
+
+        // Initialize Directory overview
+        directoryOverview.setRoot(getFSTreeItemsFromIndex(home));
+        directoryOverview.setCellFactory(p -> new InteractiveTreeCellImpl(observableFileNodes));
+
     }
     @FXML
     protected void onHelloButtonClick() {
@@ -71,5 +97,28 @@ public class MainController {
         Else,
             remove editable row from table view
          */
+    }
+
+    private FSTreeItem getFSTreeItemsFromIndex(FSNode fsNode) {
+        List<FSNode> children = fsNode.getChildren();
+
+        FSTreeItem rootTreeItem = new FSTreeItem(fsNode.getPath().toFile(), fsNode);
+        for (FSNode child: children) {
+            if(toShowHiddenFiles(child.getFile().getFileName().startsWith("."))) {
+                FSTreeItem treeItem;
+                if(child.isLeaf()) {
+                    treeItem = new FSTreeItem(child.getPath().toFile(), child);
+                } else {
+                    treeItem = getFSTreeItemsFromIndex(child);
+                }
+                rootTreeItem.getChildren().add(treeItem);
+            }
+        }
+
+        return rootTreeItem;
+    }
+
+    private boolean toShowHiddenFiles(boolean startsWithDot) {
+        return !(startsWithDot && !showHiddenFiles);
     }
 }
