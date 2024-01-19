@@ -1,6 +1,12 @@
 # J-File Explorer
 Java-based File Explorer for project 3 - Directory Browser
 
+# Usage
+Folders can be opened up and view by double-clicking in the directory overview to expand the folder
+or clicking once to show the contents within the folder.
+
+If there are no items in the folder, the content pane will be empty.
+
 # Features
 ## Core
 - Navigate through the file directories
