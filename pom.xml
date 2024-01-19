@@ -64,12 +64,21 @@
             <scope>test</scope>
         </dependency>
         <!--        Icons -->
-        <!-- https://mvnrepository.com/artifact/org.freedesktop.tango/tango-icon-theme -->
+        <!-- https://mvnrepository.com/artifact/org.codehaus.griffon.plugins/griffon-tangoicons-plugin -->
         <dependency>
-            <groupId>org.freedesktop.tango</groupId>
-            <artifactId>tango-icon-theme</artifactId>
-            <version>0.8.90</version>
+            <groupId>org.codehaus.griffon.plugins</groupId>
+            <artifactId>griffon-tangoicons-plugin</artifactId>
+            <version>2.0.0</version>
+            <type>pom</type>
+            <scope>import</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.codehaus.griffon.plugins/griffon-tangoicons-javafx -->
+        <dependency>
+            <groupId>org.codehaus.griffon.plugins</groupId>
+            <artifactId>griffon-tangoicons-javafx</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

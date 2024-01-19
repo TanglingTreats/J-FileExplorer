@@ -50,7 +50,7 @@ public class FSIndex {
                 if(file.isDirectory()) {
                     // Create directory file node
                     FileNode fileNode = new FileNode(file.getName(), "dir", 0L, file.getAbsolutePath());
-                    FSNode fsNode = new FSNode(fileNode);
+                    FSNode fsNode = new FSNode(fileNode, path);
 
                     // Set home file node
                     if(firstDir.get()) {
@@ -106,7 +106,7 @@ public class FSIndex {
                     }
 
                     FileNode fileNode = new FileNode(file.getName(), "file", file.length() / 1024, file.getAbsolutePath());
-                    FSNode fsNode = new FSNode(fileNode);
+                    FSNode fsNode = new FSNode(fileNode, path);
 
                     FSNode parentDir = fsNodeStack.peek();
                     List<FSNode> children = parentDir.getChildren();
