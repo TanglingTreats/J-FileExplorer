@@ -15,9 +15,7 @@ public class FSNode {
 
     public FSNode(FileNode file, Path path) {
         this.file = file;
-        if(file.getType().equals("dir")) {
-            children = new ArrayList<>();
-        }
+        children = new ArrayList<>();
 
         this.path = path;
     }
@@ -44,5 +42,9 @@ public class FSNode {
 
     public void setPath(Path path) {
         this.path = path;
+    }
+
+    public boolean isLeaf() {
+        return this.children.isEmpty();
     }
 }

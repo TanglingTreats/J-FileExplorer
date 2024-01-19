@@ -117,12 +117,17 @@ public class MainController {
         }
     }
 
-    private TreeItem getFSTreeItemsFromIndex(FSNode fsNode) {
+    private FSTreeItem getFSTreeItemsFromIndex(FSNode fsNode) {
         List<FSNode> children = fsNode.getChildren();
         FSTreeItem rootTreeItem = new FSTreeItem(fsNode.getPath().toFile());
         for (FSNode child: children) {
             if(toShowHiddenFiles(child.getFile().getFileName().startsWith("."))) {
-                FSTreeItem treeItem = new FSTreeItem(child.getPath().toFile());
+                FSTreeItem treeItem;
+                if(child.isLeaf()) {
+                    treeItem = new FSTreeItem(child.getPath().toFile());
+                } else {
+                    treeItem = getFSTreeItemsFromIndex(child);
+                }
                 rootTreeItem.getChildren().add(treeItem);
             }
         }

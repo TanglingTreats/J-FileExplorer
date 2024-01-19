@@ -9,12 +9,6 @@ import javafx.scene.image.ImageView;
 import griffon.javafx.support.tangoicons.TangoIcon;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 
 public class FSTreeItem extends TreeItem<String> {
     public static Image folderCollapseImage= new TangoIcon(Tango.PLACES_FOLDER);
@@ -49,6 +43,7 @@ public class FSTreeItem extends TreeItem<String> {
             }
         }
 
+        // TreeItem expand event
         this.addEventHandler(TreeItem.branchExpandedEvent(),new EventHandler(){
             @Override
             public void handle(Event e){
@@ -60,6 +55,7 @@ public class FSTreeItem extends TreeItem<String> {
             }
         });
 
+        // TreeItem collapse event
         this.addEventHandler(TreeItem.branchCollapsedEvent(),new EventHandler(){
             @Override
             public void handle(Event e){
