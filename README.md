@@ -7,6 +7,9 @@ or clicking once to show the contents within the folder.
 
 If there are no items in the folder, the content pane will be empty.
 
+Currently, the indexing of directory starts with the home folder.
+It will only go up to a depth of 2 and hidden files are not shown.
+
 # Features
 ## Core
 - Navigate through the file directories
