@@ -69,16 +69,21 @@ public class MainController {
     public void initialize() {
         // Check index
         FSNode home = dirIndex.home;
-        System.out.println(home.getFile().getFileName());
-        System.out.println(home.getChildren().size());
 
+        directoryView.setItems(observableFileNodes);
         // Populate observable list
         getFileNodesFromIndex(home);
 
-        directoryView.setItems(observableFileNodes);
+        // Set empty content pane if home is empty
+        if(!home.getChildren().isEmpty()) {
+            root.setCenter(directoryView);
+        } else {
+            root.setCenter(emptyContent);
+        }
 
-        // TODO: Set center content based on existence of content in folder
-        root.setCenter(directoryView);
+        // Initialize Directory overview
+        directoryOverview.setRoot(getFSTreeItemsFromIndex(home));
+
     }
     @FXML
     protected void onHelloButtonClick() {
@@ -110,6 +115,24 @@ public class MainController {
                 observableFileNodes.add(child.getFile());
             }
         }
+    }
+
+    private FSTreeItem getFSTreeItemsFromIndex(FSNode fsNode) {
+        List<FSNode> children = fsNode.getChildren();
+        FSTreeItem rootTreeItem = new FSTreeItem(fsNode.getPath().toFile());
+        for (FSNode child: children) {
+            if(toShowHiddenFiles(child.getFile().getFileName().startsWith("."))) {
+                FSTreeItem treeItem;
+                if(child.isLeaf()) {
+                    treeItem = new FSTreeItem(child.getPath().toFile());
+                } else {
+                    treeItem = getFSTreeItemsFromIndex(child);
+                }
+                rootTreeItem.getChildren().add(treeItem);
+            }
+        }
+
+        return rootTreeItem;
     }
 
     private boolean toShowHiddenFiles(boolean startsWithDot) {

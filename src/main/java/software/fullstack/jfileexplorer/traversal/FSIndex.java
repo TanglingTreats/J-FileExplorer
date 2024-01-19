@@ -9,7 +9,6 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -50,7 +49,7 @@ public class FSIndex {
                 if(file.isDirectory()) {
                     // Create directory file node
                     FileNode fileNode = new FileNode(file.getName(), "dir", 0L, file.getAbsolutePath());
-                    FSNode fsNode = new FSNode(fileNode);
+                    FSNode fsNode = new FSNode(fileNode, path);
 
                     // Set home file node
                     if(firstDir.get()) {
@@ -106,7 +105,7 @@ public class FSIndex {
                     }
 
                     FileNode fileNode = new FileNode(file.getName(), "file", file.length() / 1024, file.getAbsolutePath());
-                    FSNode fsNode = new FSNode(fileNode);
+                    FSNode fsNode = new FSNode(fileNode, path);
 
                     FSNode parentDir = fsNodeStack.peek();
                     List<FSNode> children = parentDir.getChildren();
