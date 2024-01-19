@@ -39,6 +39,9 @@ public class MainController {
 
     private ObservableList<FileNode> observableFileNodes = FXCollections.observableArrayList();
 
+    // Toggle to show or hide hidden files
+    private boolean showHiddenFiles = false;
+
     public MainController() {
         Label emptyLabel = new Label();
         emptyLabel.setText("Nothing to show here...");
@@ -101,7 +104,15 @@ public class MainController {
 
         List<FSNode> children = fsNode.getChildren();
         for (FSNode child: children) {
-            observableFileNodes.add(child.getFile());
+            // If file does not start with '.' and is not showing hidden files
+            // Prioritise non-hidden files
+            if(toShowHiddenFiles(child.getFile().getFileName().startsWith("."))) {
+                observableFileNodes.add(child.getFile());
+            }
         }
+    }
+
+    private boolean toShowHiddenFiles(boolean startsWithDot) {
+        return !(startsWithDot && !showHiddenFiles);
     }
 }
