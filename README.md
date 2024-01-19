@@ -1,5 +1,5 @@
 # J-File Explorer
-Java-based File Explorer
+Java-based File Explorer for project 3 - Directory Browser
 
 # Features
 ## Core
