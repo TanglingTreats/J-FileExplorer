@@ -7,6 +7,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import griffon.javafx.support.tangoicons.TangoIcon;
+import javafx.scene.input.MouseEvent;
+import software.fullstack.jfileexplorer.traversal.FSNode;
 
 import java.io.File;
 
@@ -19,10 +21,14 @@ public class FSTreeItem extends TreeItem<String> {
 
     private boolean isDirectory;
 
-    public FSTreeItem(File file) {
+    private FSNode node;
+
+    public FSTreeItem(File file, FSNode node) {
         super(file.getAbsolutePath());
 
         this.fullPath = file.getAbsolutePath();
+
+        this.node = node;
 
         this.isDirectory = file.isDirectory();
         if(file.isDirectory()) {
@@ -66,6 +72,11 @@ public class FSTreeItem extends TreeItem<String> {
                 }
             }
         });
+
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            FSTreeItem source = (FSTreeItem) event.getSource();
+            System.out.println(source.fullPath);
+        });
     }
 
     public String getFullPath() {
@@ -82,5 +93,13 @@ public class FSTreeItem extends TreeItem<String> {
 
     public void setDirectory(boolean directory) {
         isDirectory = directory;
+    }
+
+    public FSNode getNode() {
+        return node;
+    }
+
+    public void setNode(FSNode node) {
+        this.node = node;
     }
 }
