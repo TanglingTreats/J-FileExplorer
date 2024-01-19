@@ -1,12 +1,12 @@
 # J-File Explorer
-Java-based File Explorer
+Java-based File Explorer for project 3 - Directory Browser
 
 # Features
 ## Core
 - Navigate through the file directories
     - List files and folders
 - Have an overall view of the file directory
-    - Accordion dropdown for nests
+    - Accordion dropdown for nested items
 
 ## Quality of Life
 - Preview highlighted files
@@ -25,3 +25,11 @@ Java-based File Explorer
 # Technology Stack
 - Java 17
 - Java FX
+- Maven
+
+# Current Progress
+![Current progress](./resources/progress.png)
+
+# Things to note
+Application will stop going through the file system as soon as it encounters the first permission error. 
+Thus displaying only those that have been indexed.
