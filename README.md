@@ -29,3 +29,7 @@ Java-based File Explorer for project 3 - Directory Browser
 
 # Current Progress
 ![Current progress](./resources/progress.png)
+
+# Things to note
+Application will stop going through the file system as soon as it encounters the first permission error. 
+Thus displaying only those that have been indexed.
